@@ -1,0 +1,50 @@
+﻿@page "/countries"
+@using CRM.DataAccess.Models;
+@using CRM.Blazor.Services;
+@inject CountryService CountryService;
+
+<PageTitle>Countries</PageTitle>
+
+<h1>Country List</h1>
+
+<p>This component fetches and displays a list of countries from the API.</p>
+
+@if (countries == null)
+{
+   <p><em>Loading...</em></p>
+}
+else
+{
+   <div class="bg-gray-100 p-4 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold mb-4">Countries</h2>
+      <ul class="list-disc pl-5 space-y-2">
+         @foreach (var country in countries)
+         {
+            <li class="bg-white p-2 rounded-md shadow-sm">
+               <strong>ID:</strong> @country.Id, <strong>Name:</strong> @country.Name
+            </li>
+         }
+      </ul>
+   </div>
+}
+
+@code {
+   private List<Country>? countries;
+
+   /// <summary>
+   /// Initializes the component by fetching the country data from the service.
+   /// </summary>
+   protected override async Task OnInitializedAsync()
+   {
+      try
+      {
+         countries = await CountryService.GetCountriesAsync();
+      }
+      catch (HttpRequestException ex)
+      {
+         Console.WriteLine($"Error fetching countries: {ex.Message}");
+         // Handle the error, maybe show a user-friendly message
+         countries = new List<Country>();
+      }
+   }
+}
