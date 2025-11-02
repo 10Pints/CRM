@@ -1,0 +1,51 @@
+﻿{
+   "Logging": {
+      "LogLevel": {
+         "Default": "Debug",
+         "System": "Information",
+         "Microsoft": "Information"
+      }
+   },
+
+   "ThreadSettings": { "MaxThreads": 4 },
+
+   "appSettings": {
+      "Name": "CRM_config",
+      "FilePath": "D:\\Dev\\CRM\\Project Offie\\CRM_config.json",
+      "Server": "DevI9",
+      "Instance": "",
+      "Database": "Property_Dev",
+      "Script Dir": "D:\\Dev\\CRM\\SQL\\Backups",
+      "Script File": "Property_Dev.sql",
+      "CreateMode": "Create",
+
+      "RequiredAssemblies": "RegEx,SQLRegEx,tSQLtCLR",
+      "RequiredSchemas": "dbo",
+      "RequiredFunctions": "*",
+      "RequiredProcedures": "*",
+      "RequiredTables": "*",
+      "RequiredViews": "*",
+      "RequiredUserDefinedTypes": "*",
+      "RequiredUserDefineDataTypes": "*",
+      "RequiredUserDefineDataTableTypes": "*",
+
+      "UnwantedAssemblies": "Microsoft.SqlServer.Types",
+      "UnwantedSchemas": "INFORMATION_SCHEMA,sys,tSQLt",
+      "UnwantedFunctions": "fn_diagramobjects",
+      "UnwantedProcedures": "sp_alterdiagram,dbo.sp_creatediagram,sp_dropdiagram,sp_helpdiagramdefinition,sp_helpdiagrams,sp_renamediagram,sp_upgraddiagrams",
+      "UnwantedTables": "sysdiagrams",
+      "UnwantedTableTypes": "",
+      "UnwantedUserDefinedDataTypes": "",
+      "UnwantedUserDefinedTableTypes": "",
+      "UnwantedUserDefinedTypes": "",
+      "UnwantedViews": "",
+
+      "AddTimestamp": "true",
+      "ScriptUseDb": "true",
+      "DisplayScript": "true",
+      "DisplayLog": "true",
+      "LogFile": "D:\\Logs\\CRM_backup.log",
+      "LogLevel": "INFO",
+      "IsExportingData": "false"
+   }
+}

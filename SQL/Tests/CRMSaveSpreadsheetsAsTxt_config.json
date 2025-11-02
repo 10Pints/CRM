@@ -1,0 +1,54 @@
+﻿{
+   "appSettings": {
+    "Resort Sale": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Resort Sale",
+         "range": "A1:AA1000"
+      }
+    ,"Country": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "A2:A"
+      }
+    ,"Delegate": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "B2:B"
+      }
+    ,"Alias": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "C2:C"
+      }
+    ,"Status": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "D2:D"
+      }
+    ,"Area": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "E2:E"
+      }
+    ,"Agent": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "F2:F"
+      }
+      ,"AgentType": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "G3:G"
+      }
+      ,"Action": {
+         "file": "Property Sales 251002-1200.xlsx",
+         "worksheet": "Lists",
+         "range": "H3:H"
+      }
+   },
+   "EPPlus": {
+      "ExcelPackage": {
+         "LicenseContext": "Commercial"
+      }
+   }
+}

@@ -1,0 +1,31 @@
+name
+Accepted
+Active
+Advertised
+Await email txt
+Bollocks
+Cannot be reached
+Contacted 1
+Contacted 2
+Dead
+Emailed
+Engaged
+Got clients
+Msgd
+Msgd 2
+Msgd FB
+Msgd Viber
+Msgd Web
+Msgd Whatspp
+Nearly dead
+OS
+Phoned
+Replied 1
+Sent details (g-share)
+Subscriber cannot be reached
+Trying phone
+Interested
+Arranged visit
+Visited
+Visited Not Interested
+Visited Interested

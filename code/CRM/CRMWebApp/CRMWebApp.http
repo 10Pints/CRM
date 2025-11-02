@@ -1,0 +1,7 @@
+
+@CRMWebApp_HostAddress = http://localhost:5237
+
+GET {{CRMWebApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

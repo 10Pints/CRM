@@ -1,0 +1,178 @@
+@page "/agents"
+@using Microsoft.AspNetCore.Components.Forms
+@using CRM.DataAccess.Models
+@using CRM.Shared
+@using CRM.Blazor.Services
+@using CRM.Blazor.Models
+@inject AreaService AreaService
+@inject ContactService ContactService
+@inject AgentService AgentService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Agents</PageTitle>
+
+<h1>Agents</h1>
+
+<p>This page displays a list of agents and allows you to filter and select them for messaging.</p>
+
+<div class="bg-gray-100 p-6 rounded-xl shadow-lg mb-6">
+   <h2 class="text-xl font-bold mb-4">Search Agents</h2>
+   <EditForm Model="@searchCriteria" OnValidSubmit="SearchAgents">
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+           <!-- Contact Multi-Select Dropdown (Names) -->
+           <div class="form-group">
+               <label for="contact-select" class="block text-gray-700 font-medium mb-1">Names</label>
+               <select multiple id="contact-select"
+                       data-placeholder="Select Names"
+                       class="w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                       @onchange="HandleContactSelection">
+                   @if (contacts != null)
+                   {
+                       foreach (var item in contacts)
+                       {
+                           <option value="@item.Id.ToString()">@item.Name</option>
+                       }
+                   }
+               </select>
+           </div>
+
+           <!-- Area Multi-Select Dropdown -->
+           <div class="form-group">
+               <label for="area-select" class="block text-gray-700 font-medium mb-1">Areas</label>
+               <select multiple id="area-select"
+                       data-placeholder="Select Areas"
+                       class="w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                       @onchange="HandleAreaSelection">
+                   @if (areas != null)
+                   {
+                       foreach (var item in areas)
+                       {
+                           <option value="@item.Id.ToString()">@item.Name</option>
+                       }
+                   }
+               </select>
+           </div>
+       </div>
+       <div class="mt-4">
+           <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Search</button>
+       </div>
+   </EditForm>
+</div>
+
+@if (agents == null)
+{
+   <p><em>Loading agents...</em></p>
+}
+else
+{
+   <div class="bg-white p-4 rounded-lg shadow-lg overflow-x-auto">
+       <table class="min-w-full divide-y divide-gray-200">
+           <thead class="bg-gray-50">
+               <tr>
+                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                       First Name
+                   </th>
+                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                       Last Name
+                   </th>
+                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                       Phone Number
+                   </th>
+                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                       Email
+                   </th>
+               </tr>
+           </thead>
+           <tbody class="bg-white divide-y divide-gray-200">
+               @foreach (var agent in agents)
+               {
+                   <tr>
+                       <td class="px-6 py-4 whitespace-nowrap">@agent.FirstName</td>
+                       <td class="px-6 py-4 whitespace-nowrap">@agent.LastName</td>
+                       <td class="px-6 py-4 whitespace-nowrap">@agent.PhoneNumber</td>
+                       <td class="px-6 py-4 whitespace-nowrap">@agent.Email</td>
+                   </tr>
+               }
+           </tbody>
+       </table>
+   </div>
+}
+
+@code {
+   private List<Agent>? agents;
+   private List<CRM.Shared.ReferenceItem>? contacts;
+   private List<CRM.Shared.ReferenceItem>? areas;
+#pragma warning disable CS0414
+   private bool firstRender = true;
+#pragma warning restore CS0414
+
+   private SearchCriteria searchCriteria = new SearchCriteria();
+
+   /// <summary>
+   /// Loads agents and reference data on component initialization.
+   /// </summary>
+   protected override async Task OnInitializedAsync()
+   {
+       try
+       {
+           agents = await AgentService.GetAgentsAsync();
+           contacts = await ContactService.GetContactsAsync();
+           areas = await AreaService.GetAreasAsync();
+       }
+       catch (HttpRequestException ex)
+       {
+           Console.WriteLine($"Error fetching data: {ex.Message}");
+           // Return empty lists to prevent null reference exceptions in the UI
+           agents = new List<Agent>();
+           contacts = new List<CRM.Shared.ReferenceItem>();
+           areas = new List<CRM.Shared.ReferenceItem>();
+       }
+   }
+
+   /// <summary>
+   /// Initializes Select2 using JavaScript interop after the component has rendered.
+   /// The `firstRender` flag ensures this code runs only once to prevent re-initializing.
+   /// </summary>
+   protected override async Task OnAfterRenderAsync(bool firstRender)
+   {
+       if (firstRender)
+       {
+           await JSRuntime.InvokeVoidAsync("setupSelect2", "#contact-select");
+           await JSRuntime.InvokeVoidAsync("setupSelect2", "#area-select");
+           this.firstRender = false;
+       }
+   }
+
+   /// <summary>
+   /// Handles the selection change for the contact dropdown.
+   /// </summary>
+   private void HandleContactSelection(ChangeEventArgs e)
+   {
+       if (e.Value is string[] selectedValues)
+       {
+           searchCriteria.SelectedContactIds = selectedValues.Select(int.Parse).ToList();
+       }
+   }
+
+   /// <summary>
+   /// Handles the selection change for the area dropdown.
+   /// </summary>
+   private void HandleAreaSelection(ChangeEventArgs e)
+   {
+       if (e.Value is string[] selectedValues)
+       {
+           searchCriteria.SelectedAreaIds = selectedValues.Select(int.Parse).ToList();
+       }
+   }
+
+   /// <summary>
+   /// Synchronous method to initiate the search.
+   /// This is currently a placeholder. The actual search logic will be implemented later.
+   /// </summary>
+   private void SearchAgents()
+   {
+       Console.WriteLine("Search button clicked!");
+       Console.WriteLine($"Selected Contact IDs: {string.Join(", ", searchCriteria.SelectedContactIds)}");
+       Console.WriteLine($"Selected Area IDs: {string.Join(", ", searchCriteria.SelectedAreaIds)}");
+   }
+}
